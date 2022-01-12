@@ -1,7 +1,12 @@
-const injectDevServer = require("@cypress/react/plugins/react-scripts");
-
 module.exports = (on, config) => {
-  injectDevServer(on, config);
+  if (config.testingType === "component") {
+    const { startDevServer } = require("@cypress/webpack-dev-server");
 
-  return config;
+    // Your project's Webpack configuration
+    const webpackConfig = require("../../config/webpack.config.js");
+
+    on("dev-server:start", (options) =>
+      startDevServer({ options, webpackConfig })
+    );
+  }
 };
